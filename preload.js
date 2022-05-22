@@ -6,6 +6,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // Title bar implemenation
   new Titlebar({
     backgroundColor: Color.fromHex("#000000"),
+    icon: './res/main.png'
   });
   console.log("Ran Preload")
 });

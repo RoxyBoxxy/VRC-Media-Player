@@ -5,6 +5,7 @@ var {ElectronBlocker} = require('@cliqz/adblocker-electron');
 var {fetch} = require('cross-fetch');
 var { setupTitlebar, attachTitlebarToWindow } = require('custom-electron-titlebar/main');
 const { ipcMain } = require('electron')
+const client = require('discord-rich-presence')('977988221743022080');
 setupTitlebar();
 let mainWindow
 
@@ -14,7 +15,7 @@ function createWindow () {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    
+    icon: __dirname + './res/main.ico',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       webviewTag: true
@@ -27,6 +28,17 @@ function createWindow () {
   ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
     blocker.enableBlockingInSession(mainWindow.webContents.session);
   });
+  console.log(mainWindow.title)
+
+  var myInt = setInterval(function () {
+    client.updatePresence({
+      state: mainWindow.title,
+      details: 'Playing Music',
+      largeImageKey: 'icon',
+      smallImageKey: 'icon',
+      instance: true,
+    });
+}, 500);
   const exampleMenuTemplate = () => [
     {
       label: "File",
@@ -79,7 +91,7 @@ let tray
 
 
 app.whenReady().then(() => {
-  const icon = nativeImage.createFromPath('path/to/asset.png')
+  const icon = nativeImage.createFromPath('res/main.png')
   tray = new Tray(icon)
 
   // note: your contextMenu, Tooltip and Title code will go here!
@@ -106,5 +118,7 @@ app.on('window-all-closed', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+
 
 
